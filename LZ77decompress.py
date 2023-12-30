@@ -1,5 +1,9 @@
 # Author: Léon Brodbeck & Simon Durrer
 
+# Define the compressed data
+compressed_data = [(0, 0, 'y'), (0, 0, 'o'), (0, 0, 'u'), (0, 0, 'r'), (1, 3, 's'), (6, 5, 'e'), (3, 2, 't'), (2, 2, 'e'), (1, 1, 'r')]
+
+# Define the decompression function
 def lz77_decompress(compressed):
     # Initialize the decompressed output
     decompressed = ''
@@ -17,6 +21,5 @@ def lz77_decompress(compressed):
     return decompressed
 
 # Example usage
-compressed_data = [(0, 0, 'y'), (0, 0, 'o'), (0, 0, 'u'), (0, 0, 'r'), (1, 3, 's'), (6, 5, 'e'), (3, 2, 't'), (2, 2, 'e'), (1, 1, 'r')]
 decompressed_data = lz77_decompress(compressed_data)
 print("Decompressed Data:", decompressed_data)
