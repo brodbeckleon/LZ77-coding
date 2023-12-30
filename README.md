@@ -20,6 +20,7 @@ Designed for MicroPython, suitable for devices like the TI-nspire calculator ser
 
 ### Output
 `lz77_compress.py` Output:
+
 <img width="212" alt="image" src="https://github.com/DurrerSimon/LZ77-coding/assets/96497012/26b2dec0-b552-405b-a269-75766afbae81">
 
 `lz77_decompress.py` Output:
