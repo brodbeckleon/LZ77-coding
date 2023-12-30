@@ -1,5 +1,12 @@
 # Author: Léon Brodbeck & Simon Durrer
 
+# Adjustable Parameters
+WINDOW_SIZE = 20
+LOOK_AHEAD_BUFFER_SIZE = 15
+
+# Input Text
+INPUT_TEXT = "your sample text here"
+
 def format_compressed(compressed):
     # Format the compressed output as a table
     formatted = "Distance | Length | Next Char\n" + "-" * 30 + "\n"
@@ -8,10 +15,6 @@ def format_compressed(compressed):
     return formatted
 
 def lz77_compress(text):
-    # Window size and look-ahead buffer size
-    window_size = 20
-    look_ahead_buffer_size = 15
-
     i = 0
     result = []
 
@@ -21,7 +24,7 @@ def lz77_compress(text):
         match_length = -1
 
         # Search for the longest match
-        for j in range(max(i - window_size, 0), i):
+        for j in range(max(i - WINDOW_SIZE, 0), i):
             substring = text[j:i]
             if text.startswith(substring, i) and len(substring) > len(match):
                 match = substring
@@ -48,8 +51,7 @@ def lz77_decompress(compressed):
     return result
 
 # Test the compression
-text = "your sample text here"
-compressed = lz77_compress(text)
+compressed = lz77_compress(INPUT_TEXT)
 print("Compressed:\n" + format_compressed(compressed))
 
 # Decompress
