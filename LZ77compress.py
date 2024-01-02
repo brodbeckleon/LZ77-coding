@@ -1,59 +1,39 @@
-# Author: Léon Brodbeck & Simon Durrer
-
-# Adjustable Parameters
-WINDOW_SIZE = 20
-LOOK_AHEAD_BUFFER_SIZE = 15
-
-# Input Text
-INPUT_TEXT = "your sample text here"
-
-def format_compressed(compressed):
-    # Format the compressed output as a table
-    formatted = "Distance | Length | Next Char\n" + "-" * 30 + "\n"
-    for distance, length, next_char in compressed:
-        formatted += "{:^9} | {:^6} | {}\n".format(distance, length, next_char)
-    return formatted
-
-def lz77_compress(text):
+def lz77_compress(text, window_size, look_ahead_buffer_size):
     i = 0
     result = []
 
     while i < len(text):
-        match = ''
-        match_distance = -1
-        match_length = -1
+        max_match_distance = 0
+        max_match_length = 0
+        next_char = ''
 
-        # Search for the longest match
-        for j in range(max(i - WINDOW_SIZE, 0), i):
-            substring = text[j:i]
-            if text.startswith(substring, i) and len(substring) > len(match):
-                match = substring
-                match_distance = i - j
-                match_length = len(substring)
+        # Search for the longest match within the window and lookahead buffer
+        for j in range(max(i - window_size, 0), i):
+            match_length = 0
+            while match_length < look_ahead_buffer_size and i + match_length < len(text) and text[j + match_length] == text[i + match_length]:
+                match_length += 1
+
+            if match_length > max_match_length:
+                max_match_distance = i - j
+                max_match_length = match_length
+                if i + match_length < len(text):
+                    next_char = text[i + match_length]
 
         # Add the longest match to the result
-        if match_length > 1:
-            result.append((match_distance, match_length, text[i + match_length]))
-            i += match_length + 1
+        if max_match_length > 0:
+            result.append((max_match_distance, max_match_length, next_char))
+            i += max_match_length + 1
         else:
             result.append((0, 0, text[i]))
             i += 1
 
     return result
 
-def lz77_decompress(compressed):
-    result = ''
-    for distance, length, next_char in compressed:
-        if length > 0:
-            start = len(result) - distance
-            result += result[start:start + length]
-        result += next_char
-    return result
-
 # Test the compression
-compressed = lz77_compress(INPUT_TEXT)
-print("Compressed:\n" + format_compressed(compressed))
+text = "aacaacabcababac"
+window_size = 6
+look_ahead_buffer_size = 4
+compressed = lz77_compress(text, window_size, look_ahead_buffer_size)
 
-# Decompress
-decompressed = lz77_decompress(compressed)
-print("Decompressed:", decompressed)
+# Display the compressed result
+print("Compressed:", compressed)
